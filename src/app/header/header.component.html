@@ -1,0 +1,23 @@
+<mat-toolbar color="primary" >
+
+    <span routerLink='/'><span class="home"> <fa-icon [icon]="faHome"></fa-icon></span></span>
+    <div class="space"></div>
+    <button *ngIf="isAuthorized"
+            mat-raised-button
+            color="primary"
+            routerLink="/create"><span class="addPost"> <fa-icon [icon]="faPlus"></fa-icon>Post</span></button>
+    <button *ngIf="!isAuthorized"
+            mat-raised-button
+            color="primary"
+            routerLink="/login">
+            <span class="signIn"> <fa-icon [icon]="faSignInAlt"></fa-icon>In</span></button>
+    <button *ngIf="!isAuthorized"
+            mat-raised-button
+            color="primary"
+            routerLink="/signup">
+            <span class="signup"> <fa-icon [icon]="faUserPlus"></fa-icon>User</span></button>
+    <button *ngIf="isAuthorized"
+            mat-raised-button
+            color="primary" (click)="onLogOut()" >
+            <span class="signOut"> <fa-icon [icon]="faSignInAlt"></fa-icon>Out</span></button>
+  </mat-toolbar>

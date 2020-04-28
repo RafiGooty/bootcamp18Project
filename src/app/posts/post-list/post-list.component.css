@@ -1,0 +1,30 @@
+:host{
+    display: block;
+    margin-top: 1 rem;
+  }
+
+  .delete{
+    font-size: x-large;
+    color: red;
+  }
+
+  .edit{
+    font-size: x-large;
+    color: royalblue;
+  }
+
+  .red {
+    height: 15px;
+    width: 15px;
+    background-color: rgb(247, 82, 82);
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .green {
+    height: 15px;
+    width: 15px;
+    background-color: rgb(83, 219, 101);
+    border-radius: 50%;
+    display: inline-block;
+  }

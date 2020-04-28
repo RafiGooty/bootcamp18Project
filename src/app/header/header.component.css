@@ -1,0 +1,17 @@
+.space{
+    flex:1 1 auto;
+}
+
+.signIn .signOut{
+  font-size: medium;
+  font-weight: lighter;
+}
+
+.signup{
+  font-size: medium;
+  font-weight: lighter;
+}
+
+.home{
+  cursor: pointer;
+}

@@ -1,0 +1,40 @@
+<mat-card>
+    <form [formGroup]="ReactiveformGroup" (submit)="onAddPost()">
+      <mat-form-field>
+        <input  matInput
+                type="text"
+                name="title"
+                formControlName="title"
+                placeholder="Post title"
+          >
+          <mat-error *ngIf="ReactiveformGroup.get('title').invalid">please enter a post title</mat-error>
+      </mat-form-field>
+      <button mat-raised-button
+              type="button"
+              (click)="inputFile.click()"
+      >Upload Image</button>
+      <input type="file"
+              id="inputFile"
+              (change)="onFileUpload($event)"
+      #inputFile>
+      <div *ngIf="filePreview">
+        <img [src]="filePreview" alt="">
+      </div>
+      <mat-form-field>
+        <textarea
+                  matInput
+                  rows="6"
+                  name="content"
+                  formControlName="content"
+                  placeholder="Post Content"
+        ></textarea>
+        <mat-error *ngIf="ReactiveformGroup.get('content').invalid">please enter a post content</mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button
+              color="accent"
+              type="submit"
+      > Save Post </button>
+  </form>
+  </mat-card>
+

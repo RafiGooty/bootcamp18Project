@@ -1,0 +1,8 @@
+#inputFile{
+    visibility: hidden;
+}
+
+mat-form-field,textarea{
+    width: 100%;
+    }
+    
