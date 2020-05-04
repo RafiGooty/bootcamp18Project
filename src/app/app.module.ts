@@ -5,37 +5,26 @@ import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PostCreateComponent} from './posts/post-create/post-create.component';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// import {  MatInputModule,
-//           MatCardModule,
-//           MatButtonModule,
-//           MatToolbarModule,
-//           MatExpansionModule
-//         } from "@angular/material";
-        import {MatInputModule} from '@angular/material/input';
-        import {MatCardModule} from '@angular/material/card';
-        import {MatButtonModule} from '@angular/material/button';
-        import {MatToolbarModule} from '@angular/material/toolbar';
-        import {MatExpansionModule} from '@angular/material/expansion';
-        import {MatPaginatorModule} from '@angular/material/paginator';
-import {  FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import { FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import { HeaderComponent } from './header/header.component';
-import { PostListComponent } from './posts/post-list/post-list.component';
-import { LoginComponent } from './auth/login/login.component';
-import { SignupComponent } from './auth/signup/signup.component'
+// import { LoginComponent } from './auth/login/login.component';
+// import { SignupComponent } from './auth/signup/signup.component'
 import { HttpConfigInterceptor } from './interceptor/httpconfig.interceptor';
+import { AngularMaterialModule } from './angular-material.module';
+import { PostsModule } from './posts/posts.module';
+import { AuthModule } from './auth/auth.module';
+
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    PostCreateComponent,
-    HeaderComponent,
-    PostListComponent,
-    LoginComponent,
-    SignupComponent
+    HeaderComponent
+    // LoginComponent,
+    // SignupComponent
   ],
   imports: [
     BrowserModule,
@@ -44,15 +33,10 @@ import { HttpConfigInterceptor } from './interceptor/httpconfig.interceptor';
     HttpClientModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
-    MatInputModule,
-    MatCardModule,
-    MatButtonModule,
-    MatToolbarModule,
-    MatExpansionModule,
-    ReactiveFormsModule,
-    MatPaginatorModule
-
-  ],
+    AngularMaterialModule,
+    PostsModule,
+    AuthModule
+    ],
   providers: [{provide:HTTP_INTERCEPTORS,useClass:HttpConfigInterceptor,multi:true}],
   bootstrap: [AppComponent]
 })

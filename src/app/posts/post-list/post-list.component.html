@@ -6,7 +6,7 @@
         <div class="container">
           <div class="row" class="d-flex justify-content-between">
             <div >{{post.title}}</div>
-            <div  [ngClass]="userId===post.creator?'green':'red'"></div>
+            <div  [ngClass]="userId===post.creator &&isAuthorized==true?'green':'red'"></div>
           </div>
         </div>
 
@@ -24,9 +24,10 @@
     </mat-expansion-panel>
 
   </mat-accordion>
-<mat-paginator [length]="100"
-  [pageSize]="10"
-  [pageSizeOptions]="[5, 10, 25, 100]">
+<mat-paginator [length]="totalPosts"
+  [pageSize]="postsperPage"
+  [pageSizeOptions]="pageSizeOption"
+  (page)="onChangePage($event)">
 </mat-paginator>
 
   <p *ngIf="posts.length===0">No posts are added</p>

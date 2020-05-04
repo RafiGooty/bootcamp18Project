@@ -4,30 +4,38 @@ import {HttpClient} from '@angular/common/http';
 import {Subject} from 'rxjs';
 import { map } from 'rxjs/operators';
 import {Router} from '@angular/router'
+import {environment} from '../../environments/environment'
+
+const BACKEND_URL= environment.apiUrl+ "/data/";
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostsService {
 public posts:Post[]=[];
-private postsUpdated= new Subject<Post[]>();
+private postsUpdated= new Subject<{post:Post[],totalPages:number}>();
 
   constructor(private http:HttpClient,private router:Router) { }
-  getPosts(){
-      this.http.get<{message:string,posts:any}>('http://localhost:3000/apps/data')
-      .pipe(map(rowData=>{return rowData.posts.map( postData=>
-                              { return {  id      : postData._id,
-                                          title   : postData.title,
-                                          content : postData.content,
-                                          imageUrl: postData.imageUrl,
-                                          creator:  postData.creator
-                                        }
-                              })
+  getPosts(pageSize:number,currentPage:number){
+      let queryParams=`?pages=${pageSize}&currentPage=${currentPage}`;
+      console.log(queryParams);
+      this.http.get<{message:string,posts:any,totalPages:number}>
+      (BACKEND_URL+ queryParams)
+      .pipe(map(rowData=>{ return { posts:rowData.posts.map( postData=>
+                                          { return {  id      : postData._id,
+                                                      title   : postData.title,
+                                                      content : postData.content,
+                                                      imageUrl: postData.imageUrl,
+                                                      creator:  postData.creator
+                                                    }
+                                          }),
+                                    totalPages:rowData.totalPages
+                            }
                           }))
       .subscribe((data)=>{
         console.log(data,"get all");
-           this.posts= data;
-           this.postsUpdated.next(this.posts);
+           this.posts= data.posts;
+           this.postsUpdated.next({post:[...this.posts],totalPages:data.totalPages})
     });
   }
 
@@ -54,13 +62,13 @@ private postsUpdated= new Subject<Post[]>();
     postFormData.append("image",image,title);
 
     this.http.post<{message:string,post:Post}>
-    ("http://localhost:3000/apps/data",postFormData)
+    (BACKEND_URL,postFormData)
     .subscribe((responseData)=>
                                 {
-                                    post.id=responseData.post.id;
-                                    post.imageUrl=responseData.post.imageUrl;
-                                    this.posts.push(post);
-                                    this.postsUpdated.next(this.posts);
+                                    // post.id=responseData.post.id;
+                                    // post.imageUrl=responseData.post.imageUrl;
+                                    // this.posts.push(post);
+                                    // this.postsUpdated.next(this.posts);
                                     this.router.navigate(["/"]);
                                 }
               )
@@ -88,7 +96,7 @@ private postsUpdated= new Subject<Post[]>();
             }
     let post :any={id:id,title:title,content:content}
     this.http.put<{message:string,id:string}>
-    ("http://localhost:3000/apps/data/" +id,postFormData)
+    (BACKEND_URL +id,postFormData)
     .subscribe(responseData=>{
       //const post=this.posts this.posts.findIndex(val=>val['id']===responseData.id);
       console.log("update Scusscfull");
@@ -101,16 +109,16 @@ private postsUpdated= new Subject<Post[]>();
   {
    // return {...this.posts.find(post=>post.id===postId)};
    return this.http.get<{message:string,post:Post}>
-   ("http://localhost:3000/apps/data/" +postId)
+   (BACKEND_URL +postId)
   }
 
   deletePost(postID:string){
-    this.http.delete("http://localhost:3000/apps/data/" + postID)
-    .subscribe(()=>{
-      console.log("hellow")
-     const updateDeleted=this.posts.filter(post=> post.id !=postID);
-      this.posts=updateDeleted;
-      this.postsUpdated.next(this.posts);
-    })
+    return this.http.delete(BACKEND_URL + postID);
+    // .subscribe(()=>{
+    //   console.log("hellow")
+    //  const updateDeleted=this.posts.filter(post=> post.id !=postID);
+    //   this.posts=updateDeleted;
+    //   this.postsUpdated.next(this.posts);
+    // })
   }
 }

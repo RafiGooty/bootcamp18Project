@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { PageEvent } from '@angular/material/paginator';
+
 
 
 @Component({
@@ -27,37 +29,48 @@ export class PostListComponent implements OnInit, OnDestroy {
   posts:Post[]=[];
   imagePath:string;
 
+  totalPosts:number=100;
+  postsperPage:number=2;
+  pageSizeOption:number[]=[1,2,5,10];
+  currentPage:number=1;
+
   constructor(private postsServices:PostsService,private authService:AuthService) { }
 
   ngOnInit(): void {
-    this.postsServices.getPosts();
-    this.postsSub= this.postsServices.getPostUpdateListtner().subscribe((data:Post[])=>{
-    this.posts=data;
-    console.log(this.posts,"list");
-     });
-    console.log(this.posts);
-    console.log(this.postsServices.posts);
+    this.postsServices.getPosts(this.postsperPage,this.currentPage);
+    this.postsSub= this.postsServices.getPostUpdateListtner().subscribe((postData:{post:Post[],totalPages})=>{
+                    this.posts=postData.post;
+                    this.totalPosts=postData.totalPages;
+                   });
    this.isAuthorized= this.authService.getIsAuthorized();
    this.authorizationSub=this.authService.getAuthroizationlistner().subscribe(isAuthorized=>{this.isAuthorized=isAuthorized
                   }
     )
-
+    this.userId=this.authService.getUserId();
     this.userIdSub=this.authService.getUserIdlistner().subscribe(userId=>{
       this.userId=userId;
     })
 
-    this.userId=this.authService.getUserId();
+
   }
 
   ngOnDestroy(){
     this.postsSub.unsubscribe();
     this.authorizationSub.unsubscribe();
+    this.userIdSub.unsubscribe();
   }
 
   onDelete(postid:string){
-  this.postsServices.deletePost(postid);
+  this.postsServices.deletePost(postid).subscribe(deleted=>{
+    this.postsServices.getPosts(this.postsperPage,this.currentPage);
+  });
   }
 
-
+  onChangePage(event:PageEvent){
+    console.log(event);
+    this.currentPage=event.pageIndex +1;
+    this.postsperPage=event.pageSize;
+    this.postsServices.getPosts(this.postsperPage,this.currentPage);
+  }
 
 }

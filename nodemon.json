@@ -1,0 +1,6 @@
+{
+  "env" : {
+    "MONGO_AATLS_PW": "WyxbdBZnNqfCxL4i",
+    "JWT_KEY": "secret_this_code_from_gooty"
+  }
+}
